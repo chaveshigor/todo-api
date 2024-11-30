@@ -27,4 +27,10 @@ func TestNewUser(t *testing.T) {
 
 		assert.Error(t, err)
 	})
+
+  t.Run("invalid email", func(t *testing.T) {
+		_, err := model.NewUser("name", "invalid email here")
+
+		assert.Error(t, err)
+	})
 }
