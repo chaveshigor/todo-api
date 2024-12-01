@@ -3,7 +3,6 @@ package dbconnection
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"os"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -16,12 +15,12 @@ type DbInstance struct {
 func Create() (*DbInstance, error) {
 	db, err := sql.Open("sqlite3", database_path())
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 		return nil, err
 	}
 
-	db_instance := DbInstance{Connection: db}
-	return &db_instance, nil
+	Db_instance := DbInstance{Connection: db}
+	return &Db_instance, nil
 }
 
 func (i *DbInstance) Close() {

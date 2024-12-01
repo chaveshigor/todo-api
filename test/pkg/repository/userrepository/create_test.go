@@ -1,6 +1,7 @@
 package userrepository_test
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"testing"
@@ -15,7 +16,7 @@ import (
 func TestMain(m *testing.M) {
 	err := godotenv.Load("/home/higor/projects/personal/todo-api/.env")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
 	err = os.Setenv("APP_ENV", "test")
