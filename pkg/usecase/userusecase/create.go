@@ -1,15 +1,17 @@
 package userusecase
 
 import (
-	dbconnection "github.com/chaveshigor/todo-api/infra/db"
 	"github.com/chaveshigor/todo-api/pkg/model"
 	"github.com/chaveshigor/todo-api/pkg/repository/userrepository"
 )
 
 func Create(name, email string) (*model.User, error) {
-	db, _ := dbconnection.Create()
+	new_user, err := model.NewUser(name, email)
+	if err != nil {
+		return nil, err
+	}
 
-	user, err := userrepository.Create(db, name, email)
+	user, err := userrepository.Create(new_user)
 	if err != nil {
 		return nil, err
 	}

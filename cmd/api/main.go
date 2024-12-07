@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	dbconnection "github.com/chaveshigor/todo-api/infra/db"
 	"github.com/chaveshigor/todo-api/infra/server"
 	"github.com/joho/godotenv"
 )
@@ -15,8 +14,9 @@ func main() {
 		fmt.Println(err)
 	}
 
-	dbconnection.Create()
 	routes := server.InitializeRoutes()
+
+	// port := 
 
 	fmt.Println("Server starting at port 8080...")
 	http.Handle("/", routes)

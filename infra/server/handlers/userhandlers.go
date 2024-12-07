@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
-	userusecase "github.com/chaveshigor/todo-api/pkg/usecase/user_usecase"
+	"github.com/chaveshigor/todo-api/infra/server/serializers"
+	"github.com/chaveshigor/todo-api/pkg/usecase/userusecase"
 )
 
 type request struct {
@@ -20,17 +20,19 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
-		fmt.Println(err)
-		http.Error(w, "Erro ao ler o corpo da requisição", http.StatusBadRequest)
+		http.Error(w, "Error reading request body", http.StatusBadRequest)
 		return
 	}
 
 	user, err := userusecase.Create(request.User.Name, request.User.Email)
 	if err != nil {
-		fmt.Println(err)
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		serializedError, _ := json.Marshal(serializers.SerializeError(err))
+		http.Error(w, string(serializedError), http.StatusBadRequest)
 		return
 	}
 
-	json.NewEncoder(w).Encode(user)
+	serializedUser := serializers.SerializeUser(user)
+
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(serializedUser)
 }
