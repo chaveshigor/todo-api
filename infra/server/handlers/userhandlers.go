@@ -5,7 +5,8 @@ import (
 	"net/http"
 
 	"github.com/chaveshigor/todo-api/infra/server/serializers"
-	"github.com/chaveshigor/todo-api/pkg/usecase/userusecase"
+	"github.com/chaveshigor/todo-api/pkg/repository"
+	user_usecase "github.com/chaveshigor/todo-api/pkg/usecase/user-usecase"
 )
 
 type request struct {
@@ -15,7 +16,7 @@ type request struct {
 	}
 }
 
-func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
+func CreateUserHandler(w http.ResponseWriter, r *http.Request, repo *repository.Repository) {
 	var request request
 
 	err := json.NewDecoder(r.Body).Decode(&request)
@@ -24,7 +25,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := userusecase.Create(request.User.Name, request.User.Email)
+	user, err := user_usecase.Create(repo, request.User.Name, request.User.Email)
 	if err != nil {
 		serializedError, _ := json.Marshal(serializers.SerializeError(err))
 		http.Error(w, string(serializedError), http.StatusBadRequest)

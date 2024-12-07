@@ -1,11 +1,11 @@
-package userrepository_test
+package user_repository_test
 
 import (
 	"testing"
 
 	"github.com/chaveshigor/todo-api/infra/db/config"
 	"github.com/chaveshigor/todo-api/pkg/model"
-	"github.com/chaveshigor/todo-api/pkg/repository/userrepository"
+	"github.com/chaveshigor/todo-api/pkg/repository"
 	"github.com/chaveshigor/todo-api/test/testhelpers"
 	"github.com/stretchr/testify/assert"
 )
@@ -22,7 +22,10 @@ func TestCreate(t *testing.T) {
 
 		user, _ := model.NewUser("higor", "higor@mail.com")
 
-		user, err := userrepository.Create(user)
+		repo, _ := repository.New()
+		repo.UserRepository.Create(user)
+		user, err := repo.UserRepository.Create(user)
+
 		if err != nil {
 			t.Error(err)
 		}
@@ -36,7 +39,8 @@ func TestCreate(t *testing.T) {
 
 		user, _ := model.NewUser("HIGOR", "HIGOR@mail.com")
 
-		user, err := userrepository.Create(user)
+		repo, _ := repository.New()
+		user, err := repo.UserRepository.Create(user)
 		if err != nil {
 			t.Error(err)
 		}
